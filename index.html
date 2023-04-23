@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Blackjack Game</title>
+  </head>
+  <body>
+
+<h3> Welcome to the Ity Bity Blackjack Game ! </h3>
+
+<h6> Press Crtl + Shift + I to view the Dev console , </h6>
+<h6> In the console , go to the console tag to play!  </h6>
+<h6> Refresh the browser to play again , the dealer plays to win !   </h6>
+
+<h6>TEST YOUR LUCK TODAY!! $$$ !!!  </h6>
+
+    <button type="button" onclick="deal()">Deal</button>
+    <button type="button" onclick="hit()">Hit</button>
+    <button type="button" onclick="stay()">Stay</button>
+    <script>
+      let animals = { 
+        dog: 1, 
+        cat: 2, 
+        fly: 3
+      }       
+
+      animals.fly = 1; 
+      animals.cat = 2;
+      animals.dog = 3; 
+
+      let cardDealer = function() { 
+        let cards = [ "hearts" , "clubs", "diamonds", "spades" ]
+        let number = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 ] 
+
+        let cardSelection = cards[Math.floor(Math.random() * cards.length)];
+        let numberSelection = number[Math.floor(Math.random() * number.length)];
+        let deckOfCards = cardSelection + ' ' + numberSelection;
+
+        return deckOfCards;
+      }
+
+      let playerCards = [];
+      let dealerCards = [];
+
+      function deal() {
+        console.log("Dealing two cards to the player and the dealer...");
+
+        // Dealing two cards to the player
+        playerCards.push(cardDealer());
+        playerCards.push(cardDealer());
+
+        console.log("Player's cards: " + playerCards.join(', '));
+
+        // Dealing two cards to the dealer
+        dealerCards.push(cardDealer());
+        dealerCards.push(cardDealer());
+
+        console.log("Dealer's cards: " + dealerCards[0] + ", unknown");
+
+        // Check if the player has won or lost the game
+        checkGameResult(playerCards, dealerCards);
+      }
+
+      function hit() {
+        console.log("Player has chosen to hit.");
+
+        // Dealing one more card to the player
+        playerCards.push(cardDealer());
+
+        console.log("Player's cards: " + playerCards.join(', '));
+
+        // Check if the player has won or lost the game
+        checkGameResult(playerCards, dealerCards);
+      }
+
+      function stay() {
+        console.log("Player has chosen to stay.");
+
+        // Reveal dealer's hidden card
+        console.log("Dealer's cards: " + dealerCards.join(', '));
+
+        // Dealing more cards to the dealer until they have a total of 17 or more
+        while (getCardsValue(dealerCards) < 17) {
+          dealerCards.push(cardDealer());
+        }
+
+        console.log("Dealer's final cards: " + dealerCards.join(', '));
+
+        // Check if the player has won or lost the game
+        checkGameResult(playerCards, dealerCards);
+      }
+
+      function getCardsValue(cards) {
+        let totalValue = 0;
+        let aceCount = 0;
+
+        for (let i = 0; i < cards.length; i++) {
+          let cardValue = cards[i].split(' ')[1];
+          if (cardValue === '1') {
+            totalValue += 11;
+            aceCount += 1;
+          } else if (cardValue >= '10') {
+            totalValue += 10;
+          } else {
+            totalValue += parseInt(cardValue);
+          }
+        }
+
+        while (totalValue > 21 && aceCount > 0) {
+          totalValue -= 
+
+10;
+aceCount--;
+}
+
+
+    return totalValue;
+  }
+
+  function checkGameResult(playerCards, dealerCards) {
+    let playerCardsValue = getCardsValue(playerCards);
+    let dealerCardsValue = getCardsValue(dealerCards);
+
+    if (playerCardsValue > 21) {
+      console.log("Player busts! Dealer wins.");
+      return;
+    }
+
+    if (dealerCardsValue > 21) {
+      console.log("Dealer busts! Player wins.");
+      return;
+    }
+
+    if (playerCardsValue === 21) {
+      console.log("Player has a blackjack! Player wins.");
+      return;
+    }
+
+    if (dealerCardsValue === 21) {
+      console.log("Dealer has a blackjack! Dealer wins.");
+      return;
+    }
+
+    if (dealerCards.length === 5) {
+      console.log("Dealer has five cards! Dealer wins.");
+      return;
+    }
+
+    if (playerCardsValue > dealerCardsValue) {
+      console.log("Player wins!");
+    } else if (dealerCardsValue > playerCardsValue) {
+      console.log("Dealer wins!");
+    } else {
+      console.log("It's a tie!");
+    }
+  }
+</script>
+  </body>
+</html>
